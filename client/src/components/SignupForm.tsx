@@ -44,14 +44,9 @@ export default function SignupForm() {
       if (error) {
         throw error;
       }
-      toast({
-        title: "Sign up successful!",
-        description: "Please log in with your new account.",
-      });
-      // Reset form
-      setValue("email", "");
-      setValue("password", "");
-      setValue("role", "customer");
+      
+      // Form is reset and toast message is handled in the AuthProvider
+      // The provider will also try auto-login for development
     } catch (error: any) {
       toast({
         title: "Sign up failed",

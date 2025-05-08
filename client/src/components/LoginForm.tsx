@@ -36,11 +36,16 @@ export default function LoginForm() {
       if (error) {
         throw error;
       }
+      
       toast({
         title: "Login successful!",
         description: "Redirecting to your dashboard...",
       });
-      setLocation("/dashboard");
+      
+      // Add a small delay to allow the toast to be seen
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 1000);
     } catch (error: any) {
       toast({
         title: "Login failed",
