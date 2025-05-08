@@ -34,6 +34,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check if user is already logged in
   useEffect(() => {
+    // If we already have a user from localStorage, don't overwrite it with API calls
+    // This prevents any race conditions during initial load
+    if (isAuthenticated && user && userRole) {
+      console.log("User already authenticated from localStorage:", user);
+      setIsLoading(false);
+      return;
+    }
+
     const checkUser = async () => {
       setIsLoading(true);
       try {
@@ -68,6 +76,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           setUser(userData);
           setUserRole(userData.role);
+        } else if (localStorage.getItem('isAuthenticated') === 'true') {
+          // If we have stored authentication but no Supabase session,
+          // we still consider the user authenticated (test account)
+          console.log("No Supabase session but local storage has auth data");
         } else {
           console.log("No active session found");
           setIsAuthenticated(false);
@@ -76,9 +88,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (error) {
         console.error("Auth check error:", error);
-        setIsAuthenticated(false);
-        setUser(null);
-        setUserRole(null);
+        // Don't clear auth if we already have it in localStorage
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+          setIsAuthenticated(false);
+          setUser(null);
+          setUserRole(null);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -86,10 +101,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     checkUser();
     
-    // Listen for auth changes
+    // Listen for auth changes from Supabase
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log("Auth state changed:", event, session);
+        
+        // For test accounts, we don't want Supabase auth events to override our mock logins
+        // Check if we're using a test account
+        const testUser = localStorage.getItem('user');
+        const isMockLogin = testUser && JSON.parse(testUser).id.startsWith('mock-');
+        
+        if (isMockLogin && event === "SIGNED_OUT") {
+          console.log("Ignoring SIGNED_OUT for mock user");
+          return;
+        }
         
         if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
           if (session) {
@@ -118,7 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
+  }, [isAuthenticated, user, userRole]);
 
   const login = async (email: string, password: string) => {
     try {
