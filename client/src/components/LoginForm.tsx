@@ -44,7 +44,7 @@ export default function LoginForm() {
       
       // Add a small delay to allow the toast to be seen
       setTimeout(() => {
-        setLocation("/dashboard");
+        window.location.href = "/dashboard";
       }, 1000);
     } catch (error: any) {
       toast({

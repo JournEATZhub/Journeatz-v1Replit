@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "../lib/supabase";
 import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 interface User {
   id: string;
@@ -27,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   // Check if user is already logged in
   useEffect(() => {

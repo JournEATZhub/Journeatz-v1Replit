@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLocation } from "wouter";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ export default function SignupForm() {
   const { signup } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [, setLocation] = useLocation();
   
   const {
     register,
@@ -48,10 +50,10 @@ export default function SignupForm() {
       // Form is reset and toast message is handled in the AuthProvider
       // The provider will also try auto-login for development
       
-      // Add a delay before redirecting to dashboard
+      // Add a small delay to allow the toast to be seen
       setTimeout(() => {
-        setLocation("/dashboard");
-      }, 1000);
+        window.location.href = "/dashboard";
+      }, 1500);
     } catch (error: any) {
       toast({
         title: "Sign up failed",
