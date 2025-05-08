@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "../lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { usePersistentState } from "../hooks/use-persistent-state";
 
 interface User {
   id: string;
@@ -23,10 +24,11 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Use persistent state to maintain authentication across page reloads
+  const [isAuthenticated, setIsAuthenticated] = usePersistentState<boolean>('isAuthenticated', false);
   const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [user, setUser] = usePersistentState<User | null>('user', null);
+  const [userRole, setUserRole] = usePersistentState<string | null>('userRole', null);
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
