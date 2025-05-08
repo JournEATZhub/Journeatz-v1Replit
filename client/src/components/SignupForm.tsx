@@ -47,6 +47,11 @@ export default function SignupForm() {
       
       // Form is reset and toast message is handled in the AuthProvider
       // The provider will also try auto-login for development
+      
+      // Add a delay before redirecting to dashboard
+      setTimeout(() => {
+        setLocation("/dashboard");
+      }, 1000);
     } catch (error: any) {
       toast({
         title: "Sign up failed",
