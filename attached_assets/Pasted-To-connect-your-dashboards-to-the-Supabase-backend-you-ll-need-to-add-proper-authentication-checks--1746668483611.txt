@@ -1,0 +1,156 @@
+To connect your dashboards to the Supabase backend, you'll need to add proper authentication checks and database interactions. I'll guide you through updating your login.js, signup.js, and dashboard pages to correctly handle user sessions.
+
+1. Create the JavaScript Files for Authentication
+Create a file named supabase.js to centralize your Supabase client setup.
+
+supabase.js:
+
+js
+Copy
+Edit
+// supabase.js
+const SUPABASE_URL = 'https://pkwiqdvbkkseotkpugmr.supabase.co';
+const SUPABASE_KEY = 'YOUR_ANON_KEY';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+login.js:
+
+js
+Copy
+Edit
+// login.js
+async function handleLogin(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) throw error;
+
+        // Get the user's role from the database
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('role')
+            .eq('email', email)
+            .single();
+
+        if (userError) throw userError;
+
+        const userRole = userData.role;
+
+        // Redirect based on role
+        if (userRole === 'admin') {
+            window.location.href = '/admin-dashboard.html';
+        } else if (userRole === 'driver') {
+            window.location.href = '/driver-dashboard.html';
+        } else if (userRole === 'kitchen') {
+            window.location.href = '/kitchen-dashboard.html';
+        } else {
+            window.location.href = '/customer-dashboard.html';
+        }
+    } catch (error) {
+        alert('Login failed: ' + error.message);
+    }
+}
+signup.js:
+
+js
+Copy
+Edit
+// signup.js
+async function handleSignup(event) {
+    event.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const role = document.getElementById('role').value;
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) throw error;
+
+        // Add the user to the "users" table with their role
+        const { error: dbError } = await supabase
+            .from('users')
+            .insert([{ email, password, role }]);
+
+        if (dbError) throw dbError;
+
+        alert('Sign up successful! Redirecting to login...');
+        window.location.href = '/login.html';
+    } catch (error) {
+        alert('Sign up failed: ' + error.message);
+    }
+}
+2. Update the Signup Form to Include Roles
+signup.html:
+
+Add a role selection dropdown to your signup form:
+
+html
+Copy
+Edit
+<form onsubmit="handleSignup(event)">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <select id="role" required>
+        <option value="customer">Customer</option>
+        <option value="driver">Driver</option>
+        <option value="kitchen">Kitchen</option>
+        <option value="admin">Admin</option>
+    </select>
+    <button type="submit">Sign Up</button>
+</form>
+3. Set Up the Environment Variables in Replit
+Add the following environment variables in your Replit project:
+
+SUPABASE_URL: https://pkwiqdvbkkseotkpugmr.supabase.co
+
+SUPABASE_KEY: Your actual anon key from Supabase
+
+4. Update the Dashboard Pages for Role Verification
+Each dashboard should check if the user is authenticated and has the correct role. You can add this check at the top of each dashboard page:
+
+html
+Copy
+Edit
+<script src="supabase.js"></script>
+<script>
+    async function checkRole(requiredRole) {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            alert("You must be logged in to access this page.");
+            window.location.href = '/login.html';
+            return;
+        }
+
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('role')
+            .eq('email', user.email)
+            .single();
+
+        if (userError || userData.role !== requiredRole) {
+            alert("Access denied. You do not have permission to view this page.");
+            window.location.href = '/login.html';
+        }
+    }
+
+    // Call the function with the required role for each dashboard
+    checkRole("admin");  // Use "driver", "kitchen", or "customer" as needed
+</script>
+5. Test the Full Flow
+Signup as a new user (Choose a role during signup)
+
+Login as each user type (Admin, Driver, Kitchen, Customer)
+
+Check if each role is redirected to the correct dashboard
+

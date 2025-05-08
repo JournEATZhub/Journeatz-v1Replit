@@ -1,0 +1,129 @@
+1. Supabase Table Setup (SQL)
+Run the following SQL in your Supabase database to create the necessary tables:
+
+sql
+Copy
+Edit
+-- Create the Users Table
+CREATE TABLE users (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    email text UNIQUE NOT NULL,
+    password text NOT NULL,
+    role text CHECK (role IN ('admin', 'driver', 'kitchen', 'customer')) DEFAULT 'customer',
+    created_at timestamp DEFAULT now()
+);
+
+-- Create the Drivers Table
+CREATE TABLE drivers (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid REFERENCES users(id),
+    name text NOT NULL,
+    phone_number text,
+    license_number text,
+    vehicle_type text,
+    status text DEFAULT 'active',
+    created_at timestamp DEFAULT now()
+);
+
+-- Create the Kitchens Table
+CREATE TABLE kitchens (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid REFERENCES users(id),
+    name text NOT NULL,
+    address text,
+    contact_number text,
+    created_at timestamp DEFAULT now()
+);
+
+-- Create the Customers Table
+CREATE TABLE customers (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid REFERENCES users(id),
+    name text NOT NULL,
+    phone_number text,
+    address text,
+    created_at timestamp DEFAULT now()
+);
+
+-- Create the Orders Table
+CREATE TABLE orders (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid REFERENCES users(id),
+    kitchen_id uuid REFERENCES kitchens(id),
+    status text DEFAULT 'pending',
+    created_at timestamp DEFAULT now()
+);
+2. Row Level Security (RLS)
+Enable RLS (Row Level Security) for each table to ensure only the correct users can access their data:
+
+Go to:
+Database -> Table -> users -> Policies -> Add Policy
+
+Create policies like these:
+
+Admins:
+
+sql
+Copy
+Edit
+CREATE POLICY "Admins can access all users"
+ON users
+FOR SELECT
+USING (role = 'admin');
+Drivers:
+
+sql
+Copy
+Edit
+CREATE POLICY "Drivers can access only their own data"
+ON users
+FOR SELECT
+USING (auth.uid() = id);
+Kitchens:
+
+sql
+Copy
+Edit
+CREATE POLICY "Kitchens can access only their own data"
+ON users
+FOR SELECT
+USING (auth.uid() = id);
+Customers:
+
+sql
+Copy
+Edit
+CREATE POLICY "Customers can access only their own data"
+ON users
+FOR SELECT
+USING (auth.uid() = id);
+3. Add Sample Data for Testing
+Run this SQL to add sample users:
+
+sql
+Copy
+Edit
+INSERT INTO users (email, password, role) VALUES
+('admin@journeatz.com', 'Admin2020!', 'admin'),
+('driver@journeatz.com', 'Driver2020!', 'driver'),
+('kitchen@journeatz.com', 'Kitchen2020!', 'kitchen'),
+('customer@journeatz.com', 'Customer2020!', 'customer');
+4. Environment Variables in Replit
+Make sure your .env file in Replit includes:
+
+plaintext
+Copy
+Edit
+SUPABASE_URL=https://pkwiqdvbkkseotkpugmr.supabase.co
+SUPABASE_KEY=YOUR_ANON_KEY
+5. Test User Logins
+Make sure you can log in with the following credentials:
+
+Admin: admin@journeatz.com / Admin2020!
+
+Driver: driver@journeatz.com / Driver2020!
+
+Kitchen: kitchen@journeatz.com / Kitchen2020!
+
+Customer: customer@journeatz.com / Customer2020!
+
