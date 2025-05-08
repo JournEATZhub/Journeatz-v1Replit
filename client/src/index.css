@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 7%;  /* #111111 */
+  --foreground: 0 0% 100%; /* #FFFFFF */
+  --muted: 240 4% 16%;    /* #1E1E1E */
+  --muted-foreground: 0 0% 70%; /* #B3B3B3 */
+  --popover: 0 0% 7%;     /* #111111 */
+  --popover-foreground: 0 0% 100%; /* #FFFFFF */
+  --card: 240 4% 16%;     /* #1E1E1E */
+  --card-foreground: 0 0% 100%; /* #FFFFFF */
+  --border: 0 0% 20%;     /* #333333 */
+  --input: 0 0% 20%;      /* #333333 */
+  --primary: 39 100% 50%; /* #FFA500 neon orange */
+  --primary-foreground: 0 0% 0%;  /* #000000 */
+  --secondary: 120 100% 50%; /* #00FF00 neon green */
+  --secondary-foreground: 0 0% 0%; /* #000000 */
+  --accent: 240 4% 16%;   /* #1E1E1E */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
+  --destructive: 0 84% 60%; /* #FF3333 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 39 100% 50%;    /* #FFA500 */
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  .neon-orange-text {
+    @apply text-[#FFA500];
+    text-shadow: 0 0 15px #FFA500, 0 0 30px #FFA500;
+  }
+  
+  .neon-green-text {
+    @apply text-[#00FF00];
+    text-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00;
+  }
+  
+  .neon-orange-border {
+    @apply border-[#FFA500];
+    box-shadow: 0 0 15px #FFA500, 0 0 30px #FFA500;
+  }
+  
+  .neon-green-border {
+    @apply border-[#00FF00];
+    box-shadow: 0 0 15px #00FF00, 0 0 30px #00FF00;
+  }
+  
+  @keyframes neonFlicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+    }
+    20%, 22%, 24%, 55% {
+      opacity: 0.8;
+    }
+  }
+  
+  .neon-flicker {
+    animation: neonFlicker 3s infinite alternate;
+  }
+}

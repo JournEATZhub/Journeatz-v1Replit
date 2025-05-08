@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <filter id="pinkGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="orangeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="blueGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="greenGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Person 1 (left) -->
+  <path d="M150 200 C130 180 120 150 140 130 C150 120 170 120 180 130 C190 135 195 145 190 160 L185 170
+           M155 220 C150 210 150 200 160 190 C170 180 180 190 180 200 L170 250
+           M170 250 L160 320
+           M170 270 L200 320
+           M170 270 L140 320" 
+        fill="none" stroke="#FF55AA" stroke-width="4" stroke-linecap="round" 
+        filter="url(#pinkGlow)" />
+  
+  <!-- Person 2 (middle-left) -->
+  <path d="M280 200 C260 180 255 150 270 130 C285 115 300 120 310 130 C320 140 325 155 315 170 L310 175
+           M285 220 C275 210 275 200 290 190 C305 180 315 190 315 200 L300 250
+           M300 250 L295 300
+           M300 270 L320 300
+           M300 270 L280 300" 
+        fill="none" stroke="#FFA500" stroke-width="4" stroke-linecap="round" 
+        filter="url(#orangeGlow)" />
+  
+  <!-- Person 3 (middle-right) -->
+  <path d="M420 200 C400 180 395 150 410 130 C425 115 450 120 455 140 C460 150 450 165 440 170 L435 175
+           M425 220 C415 210 415 200 430 190 C445 180 455 190 455 200 L440 250
+           M440 250 L435 300
+           M440 270 L460 300
+           M440 270 L420 300" 
+        fill="none" stroke="#55AAFF" stroke-width="4" stroke-linecap="round" 
+        filter="url(#blueGlow)" />
+  
+  <!-- Person 4 (right) -->
+  <path d="M550 200 C530 180 525 150 540 130 C555 115 570 120 580 130 C590 140 595 155 585 170 L580 175
+           M555 220 C545 210 545 200 560 190 C575 180 585 190 585 200 L570 250
+           M570 250 L565 300
+           M570 270 L590 300
+           M570 270 L550 300" 
+        fill="none" stroke="#FF66AA" stroke-width="4" stroke-linecap="round" 
+        filter="url(#pinkGlow)" />
+  
+  <!-- Food items on table -->
+  <circle cx="350" cy="400" r="60" fill="none" stroke="#55AAFF" stroke-width="4" filter="url(#blueGlow)" />
+  <path d="M320 380 C330 370 340 380 350 390 C360 400 370 380 380 370" 
+        fill="none" stroke="#00FF00" stroke-width="4" filter="url(#greenGlow)" />
+  <path d="M300 350 C320 330 340 350 360 370 C370 380 380 360 400 340" 
+        fill="none" stroke="#FFA500" stroke-width="4" filter="url(#orangeGlow)" />
+  
+  <!-- Bowl of noodles -->
+  <ellipse cx="450" cy="380" rx="30" ry="15" fill="none" stroke="#55AAFF" stroke-width="4" filter="url(#blueGlow)" />
+  <path d="M430 380 C440 365 460 365 470 380" 
+        fill="none" stroke="#55AAFF" stroke-width="4" filter="url(#blueGlow)" />
+  <path d="M435 380 C445 365 455 365 465 380" 
+        fill="none" stroke="#FFA500" stroke-width="4" filter="url(#orangeGlow)" />
+  
+  <!-- Hamburger -->
+  <path d="M160 380 C160 370 190 370 190 380 C190 390 160 390 160 380" 
+        fill="none" stroke="#FFA500" stroke-width="4" filter="url(#orangeGlow)" />
+  <path d="M160 380 L190 380" 
+        fill="none" stroke="#FFA500" stroke-width="4" filter="url(#orangeGlow)" />
+  
+  <!-- Fries -->
+  <path d="M220 390 L210 350 M230 390 L225 350 M240 390 L240 350 M250 390 L255 350 M260 390 L270 350" 
+        fill="none" stroke="#FFA500" stroke-width="4" filter="url(#orangeGlow)" />
+</svg>
